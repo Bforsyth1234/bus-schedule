@@ -22,7 +22,7 @@ export class RoutesService {
         command: 'routeList',
         a: agency
       }
-    }).map(res => res.text())
+    }).map(res => res.toString())
       .subscribe(xml => this.unpackXML(xml));
   }
 
