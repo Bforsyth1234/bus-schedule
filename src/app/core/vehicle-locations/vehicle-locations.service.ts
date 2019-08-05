@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/common/http';
-import 'rxjs/add/operator/map';
-import { Subject } from 'rxjs/Subject';
+import { HttpClient } from '@angular/common/http';
+
+import { Subject } from 'rxjs';
 import { parseString } from 'xml2js';
 
 import { environment } from '../../../environments/environment';
@@ -12,7 +12,7 @@ export class VehicleLocationsService {
 
   data: Subject<VehicleLoctationsResponse>;
 
-  constructor(private http: Http) {
+  constructor(private http: HttpClient) {
     this.data = new Subject();
   }
 
