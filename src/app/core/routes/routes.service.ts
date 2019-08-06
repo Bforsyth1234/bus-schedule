@@ -21,9 +21,12 @@ export class RoutesService {
       params: {
         command: 'routeList',
         a: agency
-      }
-    }).map(res => res.toString())
-      .subscribe(xml => this.unpackXML(xml));
+      },
+      responseType: 'text'
+    })
+      .subscribe(res => {
+        this.unpackXML(res.toString())
+      });
   }
 
   private unpackXML(xml: string) {

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { MarkerCollection } from './marker-collection';
@@ -13,6 +13,8 @@ declare var google: any;
   styleUrls: ['./vehicle-location-map.component.scss']
 })
 export class VehicleLocationMapComponent implements OnDestroy, OnInit {
+  @ViewChild('vehicleLocationMap', {static: true}) vehicleLocationMapElement: ElementRef;
+
   private interval;
   private map;
   private markers: MarkerCollection;
@@ -40,8 +42,8 @@ export class VehicleLocationMapComponent implements OnDestroy, OnInit {
   }
 
   private createMap() {
-    this.map = new google.maps.Map(document.getElementById('vehicle-location-map'), {
-      center: new google.maps.LatLng(37.7749, -122.4194),
+    this.map = new google.maps.Map(this.vehicleLocationMapElement.nativeElement, {
+      center: {lat: 37.7749, lng: -122.4194},
       zoom: 12,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     });
