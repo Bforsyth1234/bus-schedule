@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
-import { Subject } from 'rxjs/Subject';
-import 'rxjs/add/operator/map';
+import { HttpClient } from '@angular/common/http';
+import { Subject } from 'rxjs';
+
 import { parseString } from 'xml2js';
 
 import { environment } from '../../../environments/environment';
@@ -12,7 +12,7 @@ export class RoutesService {
 
   data: Subject<Array<Route>>;
 
-  constructor(private http: Http) {
+  constructor(private http: HttpClient) {
     this.data = new Subject();
   }
 
@@ -21,9 +21,12 @@ export class RoutesService {
       params: {
         command: 'routeList',
         a: agency
-      }
-    }).map(res => res.text())
-      .subscribe(xml => this.unpackXML(xml));
+      },
+      responseType: 'text'
+    })
+      .subscribe(res => {
+        this.unpackXML(res.toString())
+      });
   }
 
   private unpackXML(xml: string) {

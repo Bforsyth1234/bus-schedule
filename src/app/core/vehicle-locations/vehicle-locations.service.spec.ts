@@ -32,7 +32,7 @@ describe('VehicleLocationService', () => {
     it('loads the data for the agency using the passed "since" ms timestamp', () => {
       let connection: MockConnection;
       mockBackend.connections.subscribe(c => connection = c);
-      service.refresh('umn-twin', 1499622348293);
+      service.refresh('umn-twin', '1499622348293');
       expect(connection.request.url)
         .toEqual('http://webservices.nextbus.com/service/publicXMLFeed?command=vehicleLocations&a=umn-twin&t=1499622348293');
       expect(connection.request.method).toEqual(RequestMethod.Get);
