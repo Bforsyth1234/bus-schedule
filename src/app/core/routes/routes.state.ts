@@ -27,6 +27,7 @@ export class RoutesState {
 
   @Action(GetRoutesAction)
   public getRoutes(ctx: StateContext<RoutesStateModel>) {
+    this.routesService.refresh('sf-muni');
     return this.routesService.data.pipe(tap(newRouteData => {
       const state = ctx.getState();
         ctx.setState({

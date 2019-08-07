@@ -30,7 +30,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loadRoutes();
-    this.routesService.refresh('sf-muni');
   }
 
   async loadRoutes() {
@@ -43,7 +42,6 @@ export class AppComponent implements OnInit, OnDestroy {
         });
 
       }
-      // this.routes.forEach(route => this.routeOptions.showRoute('sf-muni', route.tag));
     });
   }
   ngOnDestroy() {
