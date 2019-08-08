@@ -21,8 +21,6 @@ export class AppComponent implements OnInit, OnDestroy {
   routes$: Observable<Route[]>
 
   constructor(
-    private routeOptions: RouteOptionsService,
-    private routesService: RoutesService,
     private store: Store,
   ) {
     this.store.dispatch(new GetRoutesAction());
