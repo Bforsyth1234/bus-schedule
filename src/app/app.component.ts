@@ -13,8 +13,8 @@ import { GetRoutesAction } from './core/routes/routes.actions';
 })
 export class AppComponent implements OnInit, OnDestroy {
   @Select(RoutesState.getState) getRoutes$: Observable<RoutesStateModel>;
+  public routes: Array<Route>;
   private routesSubsciption: Subscription;
-  private routes: Array<Route>;
 
   constructor(
     private store: Store,

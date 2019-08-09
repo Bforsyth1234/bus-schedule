@@ -8,8 +8,3 @@ export class RoutesAction {
 export class GetRoutesAction {
   public static readonly type = '[Routes] Get routes';
 }
-
-export class RefreshRoutes {
-  public static readonly type = '[Routes] Refresh routes';
-  constructor(public payload) {}
-}
