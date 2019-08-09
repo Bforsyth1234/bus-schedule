@@ -1,10 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription, Observable } from 'rxjs';
-
-import { RouteOptionsService } from './core/route-options/route-options.service';
-import { Route } from './core/routes/route';
-import { RoutesService } from './core/routes/routes.service';
 import { Store, Select } from '@ngxs/store';
+
+import { Route } from './core/routes/route';
 import { RoutesState, RoutesStateModel } from './core/routes/routes.state';
 import { GetRoutesAction } from './core/routes/routes.actions';
 
@@ -16,9 +14,7 @@ import { GetRoutesAction } from './core/routes/routes.actions';
 export class AppComponent implements OnInit, OnDestroy {
   @Select(RoutesState.getState) getRoutes$: Observable<RoutesStateModel>;
   private routesSubsciption: Subscription;
-
-  routes: Array<Route>;
-  routes$: Observable<Route[]>
+  private routes: Array<Route>;
 
   constructor(
     private store: Store,
@@ -38,10 +34,10 @@ export class AppComponent implements OnInit, OnDestroy {
           if (a.title > b.title) { return 1; }
           return 0;
         });
-
       }
     });
   }
+
   ngOnDestroy() {
     this.routesSubsciption.unsubscribe();
   }
