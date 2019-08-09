@@ -1,9 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
+import { Store, Select } from '@ngxs/store';
 
-import { RouteOptionsService } from './core/route-options/route-options.service';
 import { Route } from './core/routes/route';
-import { RoutesService } from './core/routes/routes.service';
+import { RoutesState, RoutesStateModel } from './core/routes/routes.state';
+import { GetRoutesAction } from './core/routes/routes.actions';
 
 @Component({
   selector: 'bus-root',
@@ -11,22 +12,30 @@ import { RoutesService } from './core/routes/routes.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
+  @Select(RoutesState.getState) getRoutes$: Observable<RoutesStateModel>;
   private routesSubsciption: Subscription;
+  private routes: Array<Route>;
 
-  routes: Array<Route>;
-
-  constructor(private routeOptions: RouteOptionsService, private routesService: RoutesService) { }
+  constructor(
+    private store: Store,
+  ) {
+    this.store.dispatch(new GetRoutesAction());
+  }
 
   ngOnInit() {
-    this.routesService.data.subscribe(r => {
-      this.routes = r.sort((a, b) => {
-        if (a.title < b.title) { return -1; }
-        if (a.title > b.title) { return 1; }
-        return 0;
-      });
-      // this.routes.forEach(route => this.routeOptions.showRoute('sf-muni', route.tag));
+    this.loadRoutes();
+  }
+
+  async loadRoutes() {
+    await this.getRoutes$.subscribe(routesState => {
+      if (routesState.routes && routesState.routes.length > 0) {
+        this.routes = routesState.routes.sort((a, b) => {
+          if (a.title < b.title) { return -1; }
+          if (a.title > b.title) { return 1; }
+          return 0;
+        });
+      }
     });
-    this.routesService.refresh('sf-muni');
   }
 
   ngOnDestroy() {

@@ -10,6 +10,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
+import { NgxsModule } from '@ngxs/store';
+import { RoutesState } from './core/routes/routes.state';
 
 @NgModule({
   declarations: [
@@ -27,6 +29,9 @@ import { SharedModule } from './shared/shared.module';
     MatToolbarModule,
     SharedModule,
     BrowserAnimationsModule,
+    NgxsModule.forRoot([
+      RoutesState
+    ])
   ],
   providers: [],
   bootstrap: [AppComponent]

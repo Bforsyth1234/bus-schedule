@@ -1,9 +1,11 @@
 import { Component, OnDestroy, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { Subscription } from 'rxjs';
-
+import { Subscription, Observable } from 'rxjs';
 import { MarkerCollection } from './marker-collection';
 import { RouteOptionsService } from '../../core/route-options/route-options.service';
-import { VehicleLocationsService } from '../../core/vehicle-locations/vehicle-locations.service';
+import { Store, Select } from '@ngxs/store';
+import { VehicleLocationStateModel, VehicleLocationState } from 'app/core/vehicle-locations/vehicle-location.state';
+import { GetVehicleLocationAction } from '../../core/vehicle-locations/vehicle-location.action';
+import { VehicleLocation } from '../../core/vehicle-locations/vehicle-location';
 
 declare var google: any;
 
@@ -13,30 +15,34 @@ declare var google: any;
   styleUrls: ['./vehicle-location-map.component.scss']
 })
 export class VehicleLocationMapComponent implements OnDestroy, OnInit {
+  @Select(VehicleLocationState.getState) getVehicleData$: Observable<VehicleLocationStateModel>;
   @ViewChild('vehicleLocationMap', {static: true}) vehicleLocationMapElement: ElementRef;
 
-  private interval;
   private map;
   private markers: MarkerCollection;
   private vehicleSubscription: Subscription;
   private routeOptionsSubscription: Subscription;
 
-  constructor(private routeOptions: RouteOptionsService, private vehicleLocations: VehicleLocationsService) { }
+  constructor(
+    private routeOptions: RouteOptionsService,
+    private store: Store,
+    ) {
+    this.store.dispatch(new GetVehicleLocationAction());
+  }
 
   ngOnInit() {
-    this.createMap();
     this.subscribeToVehicleData();
+    this.createMap();
     this.subscribeToRouteOptionsChanges();
   }
 
   ngOnDestroy() {
-    clearInterval(this.interval);
     this.vehicleSubscription.unsubscribe();
     this.routeOptionsSubscription.unsubscribe();
   }
 
-  private buildMarkers(locs: any) {
-    locs.locations.forEach(loc => {
+  private buildMarkers(locs: VehicleLocation[]) {
+    locs.forEach(loc => {
       this.markers.merge(loc, this.routeOptions.shouldDisplayRoute('sf-muni', loc.routeTag));
     });
   }
@@ -58,10 +64,12 @@ export class VehicleLocationMapComponent implements OnDestroy, OnInit {
           this.markers.hide(change.route)));
   }
 
-  private subscribeToVehicleData() {
-    this.vehicleSubscription = this.vehicleLocations.data.subscribe(locs => this.buildMarkers(locs));
-    this.vehicleLocations.refresh('sf-muni');
-    this.interval = setInterval(() => this.vehicleLocations.refresh('sf-muni'), 15000);
+  async subscribeToVehicleData() {
+    await this.getVehicleData$.subscribe(vehicleState => {
+      if (vehicleState.vehicleLocation) {
+        this.buildMarkers(vehicleState.vehicleLocation)
+      }
+    });
   }
 
 }
