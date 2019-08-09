@@ -1,0 +1,6 @@
+{
+  "projects": {
+    "prod": "busschedule-bca0f",
+    "default": "busschedule-bca0f"
+  }
+}
