@@ -17,15 +17,9 @@ export class RoutesState {
     return state;
   }
 
-  @Selector()
-  public static getRoutes(state: RoutesStateModel) {
-    return state.routes;
-  }
+  constructor(private routesService: RoutesService) {}
 
-  constructor(private routesService: RoutesService) {
-  }
-
-  @Action(GetRoutesAction)
+  @Action(GetRoutesAction, { cancelUncompleted: true })
   public getRoutes(ctx: StateContext<RoutesStateModel>) {
     this.routesService.refresh('sf-muni');
     return this.routesService.data.pipe(tap(newRouteData => {
@@ -35,12 +29,5 @@ export class RoutesState {
             routes: newRouteData
         })
     }));
-  }
-
-  @Action(RoutesAction)
-  public add(ctx: StateContext<RoutesStateModel>, { payload }: RoutesAction) {
-    const stateModel = ctx.getState();
-    stateModel.routes = [...stateModel.routes, payload];
-    ctx.setState(stateModel);
   }
 }

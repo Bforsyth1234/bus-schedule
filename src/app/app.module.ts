@@ -5,12 +5,11 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import { MatToolbarModule} from '@angular/material';
 import { LocalStorageModule } from 'angular-2-local-storage';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
+import { NgxsModule } from '@ngxs/store';
 
 import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
-import { NgxsModule } from '@ngxs/store';
 import { RoutesState } from './core/routes/routes.state';
 
 @NgModule({

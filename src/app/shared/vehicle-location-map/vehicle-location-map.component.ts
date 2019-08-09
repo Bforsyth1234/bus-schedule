@@ -20,7 +20,6 @@ export class VehicleLocationMapComponent implements OnDestroy, OnInit {
 
   private map;
   private markers: MarkerCollection;
-  private vehicleSubscription: Subscription;
   private routeOptionsSubscription: Subscription;
 
   constructor(
@@ -37,7 +36,6 @@ export class VehicleLocationMapComponent implements OnDestroy, OnInit {
   }
 
   ngOnDestroy() {
-    this.vehicleSubscription.unsubscribe();
     this.routeOptionsSubscription.unsubscribe();
   }
 

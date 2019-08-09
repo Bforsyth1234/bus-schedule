@@ -19,7 +19,7 @@ export class VehicleLocationState {
 
   constructor(private vehicleLocationService: VehicleLocationsService) {}
 
-  @Action(GetVehicleLocationAction)
+  @Action(GetVehicleLocationAction, { cancelUncompleted: true })
   public getVehicleLocation(ctx: StateContext<VehicleLocationStateModel>) {
     this.vehicleLocationService.refresh('sf-muni');
     setInterval(() => this.vehicleLocationService.refresh('sf-muni'), 15000);
